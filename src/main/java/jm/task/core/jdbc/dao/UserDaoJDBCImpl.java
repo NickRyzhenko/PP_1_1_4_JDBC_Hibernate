@@ -17,7 +17,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try {
             PreparedStatement preparedStatement =
-                    connectionVar.prepareStatement("CREATE TABLE (id long, name varchar, lastName varchar, age byte ");
+                    connectionVar.prepareStatement("CREATE TABLE IF NOT EXISTS userstable (id long ," +
+                            " name varchar(255), lastName varchar(255), age smallint )");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -26,7 +27,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try {
-            PreparedStatement preparedStatement = connectionVar.prepareStatement("DROP TABLE ");
+            PreparedStatement preparedStatement = connectionVar.prepareStatement("DROP TABLE IF EXISTS userstable");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -35,7 +36,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try {
             PreparedStatement preparedStatement =
-                    connectionVar.prepareStatement("INSERT INTO UsersTable VALUES (1++, ?, ?, ?)");
+                    connectionVar.prepareStatement("INSERT INTO userstable VALUES (1++, ?, ?, ?)");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
@@ -47,7 +48,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         try {
             PreparedStatement preparedStatement =
-                    connectionVar.prepareStatement("DELETE FROM UsersTable WHER id = ?");
+                    connectionVar.prepareStatement("DELETE FROM userstable WHERE id = ?");
             preparedStatement.setLong(1, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -58,10 +59,10 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
         try {
             Statement statement = connectionVar.createStatement();
-            String SQL = "SELECT * FROM UsersTable";
+            String SQL = "SELECT * FROM userstable";
             ResultSet resultSet = statement.executeQuery(SQL);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
                 user.setName(resultSet.getString("name"));
@@ -77,6 +78,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-
+        try {
+            PreparedStatement preparedStatement = connectionVar.prepareStatement("TRUNCATE TABLE");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

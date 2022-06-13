@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    private static final String URL = "jdbc:mysql://localhost:3306/userschema" + "useSSL=false" + "&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/userschema";
     private static String USERNAME = "root";
     private static String PASSWORD = "Rehfyjuf15041992";
 
