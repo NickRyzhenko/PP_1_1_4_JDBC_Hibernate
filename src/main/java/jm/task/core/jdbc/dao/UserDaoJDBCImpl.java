@@ -9,7 +9,6 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     private Connection connectionVar = Util.getConnection();
-    private long count = 1;
 
     public UserDaoJDBCImpl() {
 
@@ -18,8 +17,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try {
             PreparedStatement preparedStatement =
-                    connectionVar.prepareStatement("CREATE TABLE IF NOT EXISTS userstable (id long ," +
-                            " name varchar(255), lastName varchar(255), age smallint)");
+                    connectionVar.prepareStatement("CREATE TABLE IF NOT EXISTS userstable " +
+                            "(id int not null auto_increment primary key, name varchar(255), " +
+                            "lastName varchar(255),age smallint)");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -38,11 +38,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try {
             PreparedStatement preparedStatement =
-                    connectionVar.prepareStatement("INSERT INTO userstable VALUES (?,?,?,?)");
-            preparedStatement.setLong(1, count++);
-            preparedStatement.setString(2, name);
-            preparedStatement.setString(3, lastName);
-            preparedStatement.setByte(4, age);
+                    connectionVar.prepareStatement("INSERT INTO userstable (name, lastName, age) VALUES (?,?,?)");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -55,7 +54,6 @@ public class UserDaoJDBCImpl implements UserDao {
                     connectionVar.prepareStatement("DELETE FROM userstable WHERE id = ?");
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-            count--;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

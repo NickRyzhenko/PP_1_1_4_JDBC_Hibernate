@@ -1,5 +1,9 @@
 package jm.task.core.jdbc.util;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,4 +26,14 @@ public class Util {
     public static Connection getConnection() {
         return connection;
     }
+
+    public static void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
+
 }
