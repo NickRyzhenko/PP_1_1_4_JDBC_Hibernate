@@ -20,14 +20,13 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            String sql = "CREATE TABLE IF NOT EXISTS users " +
+            String sql = "CREATE TABLE IF NOT EXISTS user " +
                     "(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(255) NOT NULL, lastName VARCHAR(255) NOT NULL, " +
                     "age SMALLINT NOT NULL)";
             Query query = session.createSQLQuery(sql).addEntity(User.class);
             query.executeUpdate();
             transaction.commit();
-            session.close();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -41,11 +40,10 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            String sql = "DROP TABLE IF EXISTS users";
+            String sql = "DROP TABLE IF EXISTS user";
             Query query = session.createSQLQuery(sql).addEntity(User.class);
             query.executeUpdate();
             transaction.commit();
-            session.close();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
